@@ -46,11 +46,18 @@ Table Bookings {
   updatedAt timestamp
 }
 
-Table Images {
+Table SpotImages {
   id integer [primary key]
-  imageableId integer
-  imageableType string
+  spotId integer
   url text
+  preview boolean
+}
+
+Table ReviewImages {
+  id integer [primary key]
+  reviewId integer
+  url text
+  preview boolean
 }
 
 Ref: "Users"."id" < "Spots"."ownerId"
@@ -63,6 +70,6 @@ Ref: "Spots"."id" < "Reviews"."spotId"
 
 Ref: "Spots"."id" < "Bookings"."spotId"
 
-Ref: "Reviews"."id" < "Images"."imageableId"
+Ref: "Reviews"."id" < "ReviewImages"."reviewId"
 
-Ref: "Spots"."id" < "Images"."imageableId"
+Ref: "Spots"."id" < "SpotImages"."spotId"
