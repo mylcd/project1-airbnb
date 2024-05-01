@@ -24,7 +24,7 @@ const spots = [
 
 module.exports = {
   async up (queryInterface, Sequelize) {
-    const ownerId = await User.findOne({
+    /*const ownerId = await User.findOne({
       where: { username: "mylcd" }
     });
     await Spot.bulkCreate([
@@ -40,8 +40,8 @@ module.exports = {
         price: 123,
         ownerId
       }
-    ], { validate: true });
-    /*try {
+    ], { validate: true });*/
+    try {
       for (let spot of spots) {
         const { address, city, state, country, lat, lng, name, description, price } = spot;
         const foundUser = await User.findOne({
@@ -55,7 +55,7 @@ module.exports = {
     } catch(err) {
       console.error(err);
       throw err;
-    }*/
+    }
   },
 
   async down (queryInterface, Sequelize) {
