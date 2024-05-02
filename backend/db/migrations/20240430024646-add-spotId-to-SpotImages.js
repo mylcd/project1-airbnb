@@ -7,13 +7,14 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
   async up (queryInterface, Sequelize) {
+    options.tableName = "SpotImages";
     await queryInterface.addColumn(
-      "SpotImages", "spotId",
+      options, "spotId",
       {
         type: Sequelize.INTEGER,
         references: { model: "Spots" },
         allowNull: false
-      }, options
+      }
     );
   },
 
