@@ -13,7 +13,8 @@ module.exports = {
       {
         type: Sequelize.INTEGER,
         references: { model: "Spots" },
-        allowNull: false
+        allowNull: false,
+        onDelete: 'CASCADE'
       }
     );
   },

@@ -31,7 +31,7 @@ module.exports = {
           review, stars,
           userId: foundUser.id,
           spotId: foundSpot.id
-        });
+        }, { validate: true });
       }
     } catch(err) {
       console.error(err);
@@ -43,8 +43,7 @@ module.exports = {
     options.tableName = 'Reviews';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options,
-      { review: reviews.map(reviewInfo => reviewInfo.review) },
-      //{review: { [Op.in]: ['This was an awesome spot!'] }},
+      {review: { [Op.in]: ['This was an awesome spot!'] }},
     {});
   }
 };

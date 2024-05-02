@@ -31,7 +31,7 @@ module.exports = {
           startDate, endDate,
           userId: foundUser.id,
           spotId: foundSpot.id
-        });
+        }, { validate: true });
       }
     } catch(err) {
       console.error(err);
@@ -43,8 +43,7 @@ module.exports = {
     options.tableName = 'Bookings';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options,
-      { endDate: bookings.map(booking => booking.endDate) },
-      //{endDate: { [Op.in]: [2099-11-20] }},
+      {endDate: { [Op.in]: [2099-11-20] }},
     {});
   }
 };

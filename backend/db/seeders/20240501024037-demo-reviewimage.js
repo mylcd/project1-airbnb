@@ -25,7 +25,7 @@ module.exports = {
         await ReviewImage.create({
           url,
           reviewId: foundReview.id
-        });
+        }, { validate: true });
       }
     } catch(err) {
       console.error(err);
@@ -37,8 +37,7 @@ module.exports = {
     options.tableName = 'ReviewImages';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options,
-      { url: reviewimages.map(reviewimage => reviewimage.url) },
-      //{url: { [Op.in]: ["https://upload.wikimedia.org/wikipedia/commons/4/49/A_black_image.jpg"] }},
+      {url: { [Op.in]: ["https://upload.wikimedia.org/wikipedia/commons/4/49/A_black_image.jpg"] }},
     {});
   }
 };
