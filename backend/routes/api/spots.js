@@ -66,7 +66,7 @@ router.post('/', restoreUser, async (req, res) => {
     price: parseFloat(price)
   });
 
-  return res.json(newPlayer);
+  return res.json(newSpot);
 });
 
 module.exports = router;
