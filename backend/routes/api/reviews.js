@@ -109,7 +109,8 @@ router.get('/current', restoreUser, requireAuth, async (req, res) => {
           lat: onereview.Spot.lat,
           lng: onereview.Spot.lng,
           name: onereview.Spot.name,
-          price: onereview.Spot.price
+          price: onereview.Spot.price,
+          previewImage: null
         },
         ReviewImages: reviewimage
       });
