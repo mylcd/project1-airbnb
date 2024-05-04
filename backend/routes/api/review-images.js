@@ -1,13 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const { userNonEmpty } = require('../../utils/tools');
-
-const { restoreUser } = require('../../utils/auth');
+const { restoreUser, requireAuth } = require('../../utils/auth');
 const { Review, ReviewImage } = require('../../db/models');
 
 // Delete a Review Image
-router.delete('/:imageId', restoreUser, userNonEmpty, async (req, res) => {
+router.delete('/:imageId', restoreUser, requireAuth, async (req, res) => {
   const { id } = req.user;
   const { imageId } = req.params;
 

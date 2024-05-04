@@ -27,21 +27,9 @@ const validateDateInBetween = (startDate, endDate, bookings) => {
   return true;
 };
 
-const userNonEmpty = (req, res, next) => {
-  if(req.user == null) {
-    res.status(403);
-      return res.json({
-        message: "Forbidden"
-      });
-  }
-  else next();
-}
-
-
 module.exports = {
   toDateString,
   toDateTimeString,
   validateDate,
-  validateDateInBetween,
-  userNonEmpty
+  validateDateInBetween
 };

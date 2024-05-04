@@ -2,9 +2,9 @@ const express = require('express');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { toDateTimeString, userNonEmpty } = require('../../utils/tools');
+const { toDateTimeString } = require('../../utils/tools');
 
-const { restoreUser } = require('../../utils/auth');
+const { restoreUser, requireAuth } = require('../../utils/auth');
 const { User, Spot, Review, ReviewImage, SpotImage } = require('../../db/models');
 
 const MAX_REVIEW_IMAGE_NUMBER = 10;
@@ -24,7 +24,7 @@ const validateReview = [
 ];
 
 // Get all Reviews of the Current User
-router.get('/current', restoreUser, userNonEmpty, async (req, res) => {
+router.get('/current', restoreUser, requireAuth, async (req, res) => {
   const { id } = req.user;
   const allReviews = await Review.findAll({
     where: {
@@ -120,7 +120,7 @@ router.get('/current', restoreUser, userNonEmpty, async (req, res) => {
 });
 
 // Add an Image to a Review based on the Review's id
-router.post('/:reviewId/images', restoreUser, userNonEmpty, async (req, res) => {
+router.post('/:reviewId/images', restoreUser, requireAuth, async (req, res) => {
   const { id } = req.user;
   const { reviewId } = req.params;
   const { url } = req.body;
@@ -169,7 +169,7 @@ router.post('/:reviewId/images', restoreUser, userNonEmpty, async (req, res) => 
 });
 
 // Edit a Review
-router.put('/:reviewId', restoreUser, userNonEmpty, validateReview, async (req, res) => {
+router.put('/:reviewId', restoreUser, requireAuth, validateReview, async (req, res) => {
   const { id } = req.user;
   const { reviewId } = req.params;
   const { review, stars } = req.body;
@@ -207,7 +207,7 @@ router.put('/:reviewId', restoreUser, userNonEmpty, validateReview, async (req, 
 });
 
 // Delete a Review
-router.delete('/:reviewId', restoreUser, userNonEmpty, async (req, res) => {
+router.delete('/:reviewId', restoreUser, requireAuth, async (req, res) => {
   const { id } = req.user;
   const { reviewId } = req.params;
 

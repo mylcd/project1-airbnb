@@ -2,9 +2,9 @@ const express = require('express');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { toDateString, toDateTimeString, validateDate, validateDateInBetween, userNonEmpty } = require('../../utils/tools');
+const { toDateString, toDateTimeString, validateDate, validateDateInBetween } = require('../../utils/tools');
 
-const { restoreUser } = require('../../utils/auth');
+const { restoreUser, requireAuth } = require('../../utils/auth');
 const { Spot, Booking, SpotImage } = require('../../db/models');
 
 const router = express.Router();
@@ -40,7 +40,7 @@ const validateBooking = [
 ];
 
 // Get all of the Current User's Bookings
-router.get('/current', restoreUser, userNonEmpty, async (req, res) => {
+router.get('/current', restoreUser, requireAuth, async (req, res) => {
   const { id } = req.user;
   const allBookings = await Booking.findAll({
     where: {
@@ -115,7 +115,7 @@ router.get('/current', restoreUser, userNonEmpty, async (req, res) => {
 });
 
 // Edit a Booking
-router.put('/:bookingId', restoreUser, userNonEmpty, validateBooking, async (req, res) => {
+router.put('/:bookingId', restoreUser, requireAuth, validateBooking, async (req, res) => {
   const { id } = req.user;
   const { bookingId } = req.params;
   const { startDate, endDate } = req.body;
@@ -193,7 +193,7 @@ router.put('/:bookingId', restoreUser, userNonEmpty, validateBooking, async (req
 });
 
 // Delete a Booking
-router.delete('/:bookingId', restoreUser, userNonEmpty, async (req, res) => {
+router.delete('/:bookingId', restoreUser, requireAuth, async (req, res) => {
   const { id } = req.user;
   const { bookingId } = req.params;
 
