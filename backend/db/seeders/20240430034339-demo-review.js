@@ -12,7 +12,7 @@ const reviews = [
     review: "This was an awesome spot!",
     stars: 5,
     spotname: "App Academy",
-    username: "mylcd"
+    username: "FakeUser2"
   }
 ];
 

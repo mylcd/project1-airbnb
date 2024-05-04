@@ -2,7 +2,7 @@ const express = require('express');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { toDateString, toDateTimeString, validateDate } = require('../../utils/tools');
+const { toDateString, toDateTimeString, validateDate, validateDateInBetween, userNonEmpty } = require('../../utils/tools');
 
 const { restoreUser } = require('../../utils/auth');
 const { Spot, Booking, SpotImage } = require('../../db/models');
@@ -40,7 +40,7 @@ const validateBooking = [
 ];
 
 // Get all of the Current User's Bookings
-router.get('/current', restoreUser, async (req, res) => {
+router.get('/current', restoreUser, userNonEmpty, async (req, res) => {
   const { id } = req.user;
   const allBookings = await Booking.findAll({
     where: {
@@ -115,7 +115,7 @@ router.get('/current', restoreUser, async (req, res) => {
 });
 
 // Edit a Booking
-router.put('/:bookingId', restoreUser, validateBooking, async (req, res) => {
+router.put('/:bookingId', restoreUser, userNonEmpty, validateBooking, async (req, res) => {
   const { id } = req.user;
   const { bookingId } = req.params;
   const { startDate, endDate } = req.body;
@@ -146,7 +146,12 @@ router.put('/:bookingId', restoreUser, validateBooking, async (req, res) => {
           errorMessage.startDate = "Start date conflicts with an existing booking"
         }
         if(!validateDate(endDate, filteredBookings)) {
-          errorMessage.startDate = "End date conflicts with an existing booking"
+          errorMessage.endDate = "End date conflicts with an existing booking"
+        }
+        if((Object.keys(errorMessage).length === 0) &&
+        (!validateDateInBetween(startDate, endDate, filteredBookings))) {
+          errorMessage.startDate = "Start date conflicts with an existing booking"
+          errorMessage.endDate = "End date conflicts with an existing booking"
         }
 
         if(Object.keys(errorMessage).length > 0) {
@@ -188,7 +193,7 @@ router.put('/:bookingId', restoreUser, validateBooking, async (req, res) => {
 });
 
 // Delete a Booking
-router.delete('/:bookingId', restoreUser, async (req, res) => {
+router.delete('/:bookingId', restoreUser, userNonEmpty, async (req, res) => {
   const { id } = req.user;
   const { bookingId } = req.params;
 

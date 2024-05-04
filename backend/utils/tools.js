@@ -17,4 +17,31 @@ const validateDate = (date, bookings) => {
   return true;
 };
 
-module.exports = { toDateString, toDateTimeString, validateDate };
+const validateDateInBetween = (startDate, endDate, bookings) => {
+  const start = Date.parse(startDate);
+  const end = Date.parse(endDate);
+  for(let booking of bookings) {
+    let bookingstart = Date.parse(booking.startDate.toISOString());
+    if(bookingstart >= start && bookingstart <= end) return false;
+  }
+  return true;
+};
+
+const userNonEmpty = (req, res, next) => {
+  if(req.user == null) {
+    res.status(403);
+      return res.json({
+        message: "Forbidden"
+      });
+  }
+  else next();
+}
+
+
+module.exports = {
+  toDateString,
+  toDateTimeString,
+  validateDate,
+  validateDateInBetween,
+  userNonEmpty
+};

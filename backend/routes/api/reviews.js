@@ -2,7 +2,7 @@ const express = require('express');
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { toDateTimeString } = require('../../utils/tools');
+const { toDateTimeString, userNonEmpty } = require('../../utils/tools');
 
 const { restoreUser } = require('../../utils/auth');
 const { User, Spot, Review, ReviewImage, SpotImage } = require('../../db/models');
@@ -24,7 +24,7 @@ const validateReview = [
 ];
 
 // Get all Reviews of the Current User
-router.get('/current', restoreUser, async (req, res) => {
+router.get('/current', restoreUser, userNonEmpty, async (req, res) => {
   const { id } = req.user;
   const allReviews = await Review.findAll({
     where: {
@@ -120,7 +120,7 @@ router.get('/current', restoreUser, async (req, res) => {
 });
 
 // Add an Image to a Review based on the Review's id
-router.post('/:reviewId/images', restoreUser, async (req, res) => {
+router.post('/:reviewId/images', restoreUser, userNonEmpty, async (req, res) => {
   const { id } = req.user;
   const { reviewId } = req.params;
   const { url } = req.body;
@@ -136,8 +136,8 @@ router.post('/:reviewId/images', restoreUser, async (req, res) => {
       }
     });
 
-    if(reviewImageCount.length < MAX_REVIEW_IMAGE_NUMBER) {
-      if(id === oneReview.userId) {
+    if(id === oneReview.userId) {
+      if(reviewImageCount.length < MAX_REVIEW_IMAGE_NUMBER) {
         const newReviewImage = await ReviewImage.create({
           url, reviewId
         });
@@ -149,14 +149,14 @@ router.post('/:reviewId/images', restoreUser, async (req, res) => {
       else {
         res.status(403);
         return res.json({
-          message: "Forbidden"
+          message: "Maximum number of images for this resource was reached"
         });
       }
     }
     else {
       res.status(403);
         return res.json({
-          message: "Maximum number of images for this resource was reached"
+          message: "Forbidden"
         });
     }
   }
@@ -169,7 +169,7 @@ router.post('/:reviewId/images', restoreUser, async (req, res) => {
 });
 
 // Edit a Review
-router.put('/:reviewId', restoreUser, validateReview, async (req, res) => {
+router.put('/:reviewId', restoreUser, userNonEmpty, validateReview, async (req, res) => {
   const { id } = req.user;
   const { reviewId } = req.params;
   const { review, stars } = req.body;
@@ -207,7 +207,7 @@ router.put('/:reviewId', restoreUser, validateReview, async (req, res) => {
 });
 
 // Delete a Review
-router.delete('/:reviewId', restoreUser, async (req, res) => {
+router.delete('/:reviewId', restoreUser, userNonEmpty, async (req, res) => {
   const { id } = req.user;
   const { reviewId } = req.params;
 

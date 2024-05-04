@@ -4,7 +4,7 @@ const { Op } = require("sequelize");
 
 const { check } = require('express-validator');
 const { handleValidationErrors } = require('../../utils/validation');
-const { toDateString, toDateTimeString, validateDate } = require('../../utils/tools');
+const { toDateString, toDateTimeString, validateDate, validateDateInBetween, userNonEmpty } = require('../../utils/tools');
 
 const { restoreUser } = require('../../utils/auth');
 const { User, Spot, Review, Booking, SpotImage, ReviewImage } = require('../../db/models');
@@ -272,7 +272,7 @@ router.get('/', async(req, res) => {
 });
 
 // Get all Spots owned by the Current User
-router.get('/current', restoreUser, async (req, res) => {
+router.get('/current', restoreUser, userNonEmpty, async (req, res) => {
   const { id } = req.user;
   const allSpots = await Spot.findAll({
     where: {
@@ -365,7 +365,9 @@ router.get('/:spotId', async (req, res) => {
     });
 
     const numReviews = associatedReviews.length;
-    const avgStar = associatedReviews.reduce((sumStar, star) => sumStar + star.stars, 0) / numReviews;
+    let avgStar = associatedReviews.reduce((sumStar, star) => sumStar + star.stars, 0) / numReviews;
+    if(isNaN(avgStar)) avgStar = null;
+    else avgStar = avgStar.toFixed(1);
     const spotimage = oneSpot.SpotImages.map(original => {
       return {
         id: original.id,
@@ -389,7 +391,7 @@ router.get('/:spotId', async (req, res) => {
       createdAt: toDateTimeString(oneSpot.createdAt),
       updatedAt: toDateTimeString(oneSpot.updatedAt),
       numReviews,
-      avgStarRating: avgStar.toFixed(1),
+      avgStarRating: avgStar,
       SpotImages: spotimage,
       Owner: {
         id: oneSpot.Owner.id,
@@ -409,7 +411,7 @@ router.get('/:spotId', async (req, res) => {
 });
 
 // Create a Spot
-router.post('/', restoreUser, validateSpot, async (req, res, next) => {
+router.post('/', restoreUser, userNonEmpty, validateSpot, async (req, res, next) => {
   const { id } = req.user;
   const { address, city, state, country, lat, lng, name, description, price }
    = req.body;
@@ -434,7 +436,7 @@ router.post('/', restoreUser, validateSpot, async (req, res, next) => {
 });
 
 // Add an Image to a Spot based on the Spot's id
-router.post('/:spotId/images', restoreUser, async (req, res) => {
+router.post('/:spotId/images', restoreUser, userNonEmpty, async (req, res) => {
   const { id } = req.user;
   const { spotId } = req.params;
   const { url, preview } = req.body;
@@ -470,7 +472,7 @@ router.post('/:spotId/images', restoreUser, async (req, res) => {
 });
 
 // Edit a Spot
-router.put('/:spotId', restoreUser, validateSpot, async (req, res, next) => {
+router.put('/:spotId', restoreUser, userNonEmpty, validateSpot, async (req, res, next) => {
   const { id } = req.user;
   const { spotId } = req.params;
   const { address, city, state, country, lat, lng, name, description, price }
@@ -520,7 +522,7 @@ router.put('/:spotId', restoreUser, validateSpot, async (req, res, next) => {
 });
 
 // Delete a Spot
-router.delete('/:spotId', restoreUser, async (req, res) => {
+router.delete('/:spotId', restoreUser, userNonEmpty, async (req, res) => {
   const { id } = req.user;
   const { spotId } = req.params;
 
@@ -602,7 +604,7 @@ router.get('/:spotId/reviews', async (req, res) => {
 });
 
 // Create a Review for a Spot based on the Spot's id
-router.post('/:spotId/reviews', restoreUser, validateReview, async (req, res) => {
+router.post('/:spotId/reviews', restoreUser, userNonEmpty, validateReview, async (req, res) => {
   const { id } = req.user;
   const { spotId } = req.params;
   const { review, stars } = req.body;
@@ -647,7 +649,7 @@ router.post('/:spotId/reviews', restoreUser, validateReview, async (req, res) =>
 });
 
 // Get all Bookings for a Spot based on the Spot's id
-router.get('/:spotId/bookings', restoreUser, async (req, res) => {
+router.get('/:spotId/bookings', restoreUser, userNonEmpty, async (req, res) => {
   const { id } = req.user;
   const { spotId } = req.params;
 
@@ -710,7 +712,7 @@ router.get('/:spotId/bookings', restoreUser, async (req, res) => {
 });
 
 // Create a Booking from a Spot based on the Spot's id
-router.post('/:spotId/bookings', restoreUser, validateBooking, async (req, res) => {
+router.post('/:spotId/bookings', restoreUser, userNonEmpty, validateBooking, async (req, res) => {
   const { id } = req.user;
   const { spotId } = req.params;
   const { startDate, endDate } = req.body;
@@ -734,7 +736,12 @@ router.post('/:spotId/bookings', restoreUser, validateBooking, async (req, res) 
         errorMessage.startDate = "Start date conflicts with an existing booking"
       }
       if(!validateDate(endDate, oneSpot.Bookings)) {
-        errorMessage.startDate = "End date conflicts with an existing booking"
+        errorMessage.endDate = "End date conflicts with an existing booking"
+      }
+      if((Object.keys(errorMessage).length === 0) &&
+        (!validateDateInBetween(startDate, endDate, oneSpot.Bookings))) {
+          errorMessage.startDate = "Start date conflicts with an existing booking"
+          errorMessage.endDate = "End date conflicts with an existing booking"
       }
 
       if(Object.keys(errorMessage).length > 0) {
