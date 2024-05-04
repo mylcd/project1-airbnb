@@ -216,7 +216,7 @@ router.get('/', async(req, res) => {
     });
     let avgStar = null;
     if(!(associatedReviews[0].dataValues.avgStars == null)) {
-      avgStar = Number.associatedReviews[0].dataValues.avgStars.toFixed(1);
+      avgStar = Math.round(associatedReviews[0].dataValues.avgStars * 10) / 10;
     }
 
     const preview = await SpotImage.findOne({
@@ -292,7 +292,7 @@ router.get('/current', restoreUser, userNonEmpty, async (req, res) => {
     });
     let avgStar = null;
     if(!(associatedReviews[0].dataValues.avgStars == null)) {
-      avgStar = Number.associatedReviews[0].dataValues.avgStars.toFixed(1);
+      avgStar = Math.round(associatedReviews[0].dataValues.avgStars * 10) / 10;
     }
 
     const preview = await SpotImage.findOne({
@@ -367,7 +367,7 @@ router.get('/:spotId', async (req, res) => {
     const numReviews = associatedReviews.length;
     let avgStar = associatedReviews.reduce((sumStar, star) => sumStar + star.stars, 0) / numReviews;
     if(isNaN(avgStar)) avgStar = null;
-    else avgStar = Number.avgStar.toFixed(1);
+    else avgStar = Math.round(avgStar * 10) / 10;;
     const spotimage = oneSpot.SpotImages.map(original => {
       return {
         id: original.id,
