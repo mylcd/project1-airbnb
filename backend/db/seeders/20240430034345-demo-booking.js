@@ -9,8 +9,8 @@ if (process.env.NODE_ENV === 'production') {
 
 const bookings = [
   {
-    startDate: 2024-11-19,
-    endDate: 2099-11-20,
+    startDate: "2024-11-19",
+    endDate: "2099-11-20",
     spotname: "App Academy",
     username: "mylcd"
   }
@@ -43,7 +43,7 @@ module.exports = {
     options.tableName = 'Bookings';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options,
-      {endDate: { [Op.in]: [2099-11-20] }},
+      {endDate: { [Op.in]: ["2099-11-20"] }},
     {});
   }
 };
