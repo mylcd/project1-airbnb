@@ -52,8 +52,8 @@ router.use('/spot-images', spotImagesRouter);
 
 router.use('/review-images', reviewImagesRouter);
 
-router.post('/test', function(req, res) {
+/*router.post('/test', function(req, res) {
   res.json({ requestBody: req.body });
-});
+});*/
 
 module.exports = router;
