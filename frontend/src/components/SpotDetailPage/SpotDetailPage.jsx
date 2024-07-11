@@ -10,11 +10,10 @@ const SpotDetailPage = () => {
   const dispatch = useDispatch();
 
   const spot = useSelector((state) => state.spot.getdetails);
-  window.console.log(spot);
 
   useEffect(() => {
     dispatch(getSpotDetails({spotId}));
-  }, [dispatch]);
+  }, [dispatch, spotId]);
 
   return (
     <>

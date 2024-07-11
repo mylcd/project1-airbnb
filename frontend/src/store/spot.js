@@ -43,6 +43,55 @@ export const getSpotDetails = (body) => async (dispatch) => {
   }
 }
 
+export const createSpot = (body) => async () => {
+  const {address, city, state, country, lat, lng, name, description, price,
+    previewImg, image1, image2, image3, image4} = body;
+  const response = await csrfFetch('/api/spots', {
+    method: 'POST',
+    body: JSON.stringify({address, city, state, country, lat, lng, name, description, price})
+  });
+  const data = await response.json();
+  await csrfFetch(`/api/spots/${data.id}/images`, {
+    method: 'POST',
+    body: JSON.stringify({
+      url: previewImg,
+      preview: true
+    })
+  });
+  if(image1.length > 0) await csrfFetch(`/api/spots/${data.id}/images`, {
+    method: 'POST',
+    body: JSON.stringify({
+      url: image1,
+      preview: false
+    })
+  });
+  if(image2.length > 0) await csrfFetch(`/api/spots/${data.id}/images`, {
+    method: 'POST',
+    body: JSON.stringify({
+      url: image2,
+      preview: false
+    })
+  });
+  if(image3.length > 0) await csrfFetch(`/api/spots/${data.id}/images`, {
+    method: 'POST',
+    body: JSON.stringify({
+      url: image3,
+      preview: false
+    })
+  });
+  if(image4.length > 0) await csrfFetch(`/api/spots/${data.id}/images`, {
+    method: 'POST',
+    body: JSON.stringify({
+      url: image4,
+      preview: false
+    })
+  });
+
+  if(response.ok) {
+    return data;
+  }
+}
+
 /*export const getAllSpotsCurrent = () => async () => {
   const response = await csrfFetch('/api/spots/current', {
     method: 'GET'
