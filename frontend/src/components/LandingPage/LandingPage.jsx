@@ -11,10 +11,11 @@ const LandingPage = () => {
   }, [dispatch]);
 
   const spots = useSelector((state) => state.spot);
-  let spotList = null;
-  if(Object.keys(spots).length > 0) spotList = Object.values(spots.getall);
-
-  return (
+  let spotsPage;
+  if(spots.getall) {
+    let spotList = null;
+    if(Object.keys(spots).length > 0) spotList = Object.values(spots.getall);
+    spotsPage = (
     <>
       <h1>Spots List</h1>
       {spotList?.map(({ id, city, state, price, avgRating, previewImage }) => (
@@ -26,6 +27,11 @@ const LandingPage = () => {
         </div>
       ))}
     </>
+    );
+  }
+
+  return (
+    spotsPage
   );
 };
 

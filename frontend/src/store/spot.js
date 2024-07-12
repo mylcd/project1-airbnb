@@ -2,6 +2,7 @@ import { csrfFetch } from "./csrf";
 
 const GET_ALL_SPOTS = 'spot/getAllSpots';
 const GET_SPOT_DETAILS = 'spot/getSpotDetails'
+const GET_SPOT_REVIEWS = 'spot/getSpotReviews'
 
 const loadSpots = (spots) => {
   return {
@@ -29,6 +30,13 @@ const loadSpotDetails = (spotdetails) => {
   };
 };
 
+const loadSpotReviews = (spotreviews) => {
+  return {
+    type: GET_SPOT_REVIEWS,
+    spotreviews
+  };
+};
+
 export const getSpotDetails = (body) => async (dispatch) => {
   const { spotId } = body;
 
@@ -39,6 +47,20 @@ export const getSpotDetails = (body) => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(loadSpotDetails(data));
+    return data;
+  }
+}
+
+export const getSpotReviews = (body) => async (dispatch) => {
+  const { spotId } = body;
+
+  const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+    method: 'GET'
+  });
+
+  if (response.ok) {
+    const data = await response.json();
+    dispatch(loadSpotReviews(data.Reviews));
     return data;
   }
 }
@@ -90,7 +112,16 @@ export const createSpot = (body) => async () => {
   if(response.ok) {
     return data;
   }
-}
+};
+
+export const createReview = (body) => async() => {
+  const { spotId, review, stars } = body;
+  const response = await csrfFetch(`/api/spots/${spotId}/reviews`, {
+    method: 'POST',
+    body: JSON.stringify({review, stars})
+  });
+  return response;
+};
 
 /*export const getAllSpotsCurrent = () => async () => {
   const response = await csrfFetch('/api/spots/current', {
@@ -113,6 +144,8 @@ const spotsReducer = (state = initialState, action) => {
     }
     case GET_SPOT_DETAILS:
       return {...state, getdetails: action.spotdetails};
+    case GET_SPOT_REVIEWS:
+      return {...state, getreviews: action.spotreviews};
     default:
       return state;
   }

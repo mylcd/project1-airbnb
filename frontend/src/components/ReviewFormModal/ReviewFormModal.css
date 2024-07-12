@@ -1,0 +1,11 @@
+.star-image {
+  width: 40px;
+  height: 40px;
+}
+
+.star-button {
+  background: none;
+  border: none;
+  margin: 0;
+  padding: 0;
+}

@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { createSpot } from '../../store/spot';
+import OpenModalButton from '../OpenModalButton/OpenModalButton';
+import LoginFormModal from '../LoginFormModal/LoginFormModal';
 import "./SpotCreateForm.css";
 
 function SpotCreateForm() {
+  const sessionUser = useSelector((state) => state.session.user);
   const dispatch = useDispatch();
 
   const [country, setCountry] = useState('');
@@ -92,7 +95,9 @@ function SpotCreateForm() {
     setErrors(newErrors);
   }, [country, address, city, state, lng, lat, description, name, price, previewImg]);
 
-  return (
+  let spotForm;
+  if (sessionUser) {
+    spotForm = (
     <form
       className="spot-create-form"
       onSubmit={handleSubmit}
@@ -213,6 +218,21 @@ function SpotCreateForm() {
         Create Spot
       </button>
     </form>
+    );
+  }
+  else {
+    spotForm = (
+      <>
+        <div>You need to <OpenModalButton
+          buttonText="Log In"
+          modalComponent={<LoginFormModal />}
+        /> first.</div>
+      </>
+    )
+  }
+
+  return (
+    spotForm
   );
 }
 
