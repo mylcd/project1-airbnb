@@ -44,7 +44,7 @@ function ProfileButton({ user }) {
         <FaUserCircle />
       </button>
       <ul className={ulClassName} ref={ulRef}>
-        <li className='userli'>{"Hello, " + (user.firstName ? user.firstName : "No Name User")}</li>
+        <li className='userli'>{"Hello, " + (user.firstName ? user.firstName : "Demo User")}</li>
         <li className='userli'>{"Username: " + user.username}</li>
         <li className='userli'>{"Email: " + user.email}</li>
         <li className='userli'><a href='/spots/current'>Manage Spots</a></li>

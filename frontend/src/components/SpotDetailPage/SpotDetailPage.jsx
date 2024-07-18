@@ -54,7 +54,7 @@ const SpotDetailPage = () => {
       modalComponent={<BookingFormModal />}
     />);
   }
-  else reserveAllowed = (<button disabled={true} className='pagebutton'>Reserve (Log In Needed)</button>);
+  else reserveAllowed = (<button disabled={true} className='pagebutton'>Reserve</button>);
 
   let postReviewAllowed = null;
   if(sessionUser && spot && spotreview && (sessionUser.id != spot.Owner.id) && (!haveReviewed(spotreview, sessionUser.id))) {
@@ -103,7 +103,7 @@ const SpotDetailPage = () => {
           <div className='spotinfo'>
             <div className='spotdescription'>
               <h3>Hosted By {(spot.Owner.firstName && spot.Owner.lastName)?
-                spot.Owner.firstName + ' ' + spot.Owner.lastName : "No Name User"}</h3>
+                spot.Owner.firstName + ' ' + spot.Owner.lastName : "Demo User"}</h3>
               <p>{spot.description}</p>
             </div>
             <div className='spotbooking'>
@@ -126,7 +126,7 @@ const SpotDetailPage = () => {
           </div>
           {spotreview.slice(0).reverse().map(({ User, createdAt, review, id }) => (
             <div key={"review"+id}>
-              <h4 className='removemargin'>{User.firstName? User.firstName : "User id " + User.id }</h4>
+              <h4 className='removemargin'>{User.firstName? User.firstName : "Demo User" }</h4>
               <p className='removemargin'>
                 {numberToMonth(createdAt.split(' ')[0].split('-')[1]) + " " + createdAt.split(' ')[0].split('-')[0]}
               </p>
