@@ -110,8 +110,8 @@ const SpotDetailPage = () => {
               <div className='row1'>
                 <h3>${spot.price} night</h3>
                 {(spot.numReviews === 0) && <p>★New</p>}
-                {(spot.numReviews === 1) && <p>★{spot.avgStarRating.toFixed(2) + ' · ' + spot.numReviews} review</p>}
-                {(spot.numReviews > 1) && <p>★{spot.avgStarRating.toFixed(2) + ' · ' + spot.numReviews} reviews</p>}
+                {(spot.numReviews === 1) && <p>★{spot.avgStarRating.toFixed(1) + ' · ' + spot.numReviews} review</p>}
+                {(spot.numReviews > 1) && <p>★{spot.avgStarRating.toFixed(1) + ' · ' + spot.numReviews} reviews</p>}
               </div>
               {reserveAllowed}
             </div>
@@ -121,7 +121,7 @@ const SpotDetailPage = () => {
             {(spot.numReviews === 0)?
               <h3>★New</h3>
               :
-              <h3>★{spot.avgStarRating.toFixed(2) + ' · ' + spot.numReviews} reviews</h3>}
+              <h3>★{spot.avgStarRating.toFixed(1) + ' · ' + spot.numReviews} reviews</h3>}
             {postReviewAllowed}
           </div>
           {spotreview.slice(0).reverse().map(({ User, createdAt, review, id }) => (

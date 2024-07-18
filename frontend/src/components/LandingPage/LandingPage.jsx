@@ -22,7 +22,7 @@ const LandingPage = () => {
           <TooltipImage image={previewImage} text={name} className={"landing"}/>
           <p className='row1'>
             <text>{city}, {state}</text>
-            <text>★{avgRating ? avgRating.toFixed(2) : "New"}</text>
+            <text>★{avgRating ? avgRating.toFixed(1) : "New"}</text>
           </p>
           <p>${price} night</p>
         </a>
