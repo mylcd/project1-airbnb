@@ -2,7 +2,7 @@ import { useState } from 'react';
 import * as sessionActions from '../../store/session';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
-import './LoginForm.css';
+import { getAllSpotsCurrent } from '../../store/spot';
 
 function LoginFormModal() {
   const dispatch = useDispatch();
@@ -11,17 +11,19 @@ function LoginFormModal() {
   const [errors, setErrors] = useState({});
   const { closeModal } = useModal();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    return dispatch(sessionActions.login({ credential, password }))
-      .then(closeModal)
+    await dispatch(sessionActions.login({ credential, password }))
+
       .catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) {
           setErrors(data.errors);
         }
       });
+    dispatch(getAllSpotsCurrent())
+      .then(closeModal);
   };
 
   const handleDemoSubmit = () => {
@@ -30,34 +32,35 @@ function LoginFormModal() {
   }
 
   return (
-    <>
-      <h1>Log In</h1>
+    <div className='modal'>
+      <h1 className='removemargin'>Log In</h1>
       <form onSubmit={handleSubmit}>
-        <label>
-          Username or Email
-          <input
-            type="text"
-            value={credential}
-            onChange={(e) => setCredential(e.target.value)}
-            required
-          />
-        </label>
-        <label>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
+        <input
+          className='center'
+          type="text"
+          value={credential}
+          onChange={(e) => setCredential(e.target.value)}
+          placeholder='Username or Email'
+          required
+        />
+        <input
+          className='center'
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder='Password'
+          required
+        />
         {errors.credential && (
-          <p>{errors.credential}</p>
+          <p className='errors removemargin'>{errors.credential}</p>
         )}
-        <button type="submit">Log In</button>
+        <button className='pagebutton center' type="submit"
+          disabled={!credential || !password || credential.length < 4 || password.length < 6}>
+            Log In
+        </button>
       </form>
-      <button className='demo-button' onClick={handleDemoSubmit}>Demo User</button>
-    </>
+      <button className='sessionbutton' style={{fontSize: "16px"}} onClick={handleDemoSubmit}>Log in as Demo User</button>
+    </div>
   );
 }
 

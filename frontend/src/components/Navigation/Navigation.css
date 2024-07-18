@@ -1,7 +1,308 @@
-html {
-  font-family: sans-serif;
-}
-
 .hidden {
   display: none;
+}
+
+.errors {
+  color: red;
+}
+
+.container {
+  display: flex;
+}
+
+.navbar {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.usermenu {
+  font-family: cursive;
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  font-size: 20px;
+  column-gap: 10px;
+}
+
+.userbutton {
+  height: 25px;
+  width: 40px;
+  background: rgb(82, 82, 172);
+  border: none;
+}
+
+.profile-dropdown {
+  position: absolute;
+  background-color: rgb(133, 157, 221);
+  min-width: 160px;
+  padding: 7px 10px;
+  margin-top: 29px;
+  z-index: 1;
+}
+
+.userli {
+  display: block;
+  text-align: right;
+}
+
+.sessionbutton {
+  border: none;
+  background-color: inherit;
+  font-size: 20px;
+  font-family: cursive;
+  cursor: pointer;
+  color: rgb(167, 18, 236);
+}
+
+img.logo {
+  width: 120px;
+  height: 50px;
+}
+
+div.logo {
+  display: flex;
+  align-items: center;
+  width: 300px;
+  height: 50px;
+  background-color: rgb(42, 103, 160);
+}
+
+text.logo {
+  font-family: cursive;
+  font-size: 40px;
+  color: rosybrown;
+  padding: 0%;
+  border: 0%;
+  margin: 0%;
+}
+
+.center {
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.left {
+  display: flex;
+  justify-self: flex-start;
+}
+
+.pagebutton {
+  background-color: rgb(167, 18, 236);
+  font-family: cursive;
+  color: white;
+  font-size: 14px;
+}
+
+.anchorbutton {
+  background-color: rgb(167, 18, 236);
+  font-family: cursive;
+  color: white;
+  font-size: 14px;
+  padding-block: 1px;
+  padding-inline: 6px;
+  border-width: 2px;
+  border-style: outset;
+  border-color: buttonborder;
+  border-image: initial;
+  cursor: default;
+}
+
+button:disabled,
+button[disabled]{
+  background-color: rgb(220, 213, 223);
+  color: rgb(70, 68, 68)
+}
+
+a {
+  text-decoration: none;
+  color: rgb(167, 18, 236);
+}
+
+input, textarea {
+  font-size: 16px;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+textarea {
+  width: 100%;
+}
+
+.spotintro {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  row-gap: 20px;
+  column-gap: 20px;
+  font-family: cursive;
+}
+
+img.landing {
+  object-fit: cover;
+  width: 300px;
+  height: 300px;
+}
+
+.row1 {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+div.detailpage {
+  font-family: cursive;
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+}
+
+div.spotinfo {
+  display: flex;
+  justify-content: space-between;
+}
+
+div.spotbooking {
+  border-radius: 15px;
+  border: 2px solid #8f1b7b;
+  display: flex;
+  flex-direction: column;
+}
+
+.removemargin {
+  margin: 0;
+  padding: 0;
+}
+
+.addwhitespace {
+  white-space: pre;
+}
+
+@media (width >= 1000px) {
+  div.spotimages {
+    display: flex;
+    column-gap: 11px;
+  }
+
+  div.preview {
+    width: 495px;
+    height: 350px;
+  }
+
+  img.preview {
+    width: 495px;
+    height: 350px;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  div.postview {
+    width: 494px;
+    height: 350px;
+    display: flex;
+    column-gap: 10px;
+    row-gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  img.postview {
+    width: 242px;
+    height: 170px;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  div.spotinfo {
+    width: 1000px;
+  }
+
+  div.spotdescription {
+    width: 650px;
+  }
+
+  div.spotbooking {
+    width: 350px;
+    height: 100px;
+    padding: 5px;
+  }
+}
+
+@media (width < 1000px) {
+  div.spotimages {
+    display: flex;
+    column-gap: 1.1vw;
+  }
+
+  div.preview {
+    width: 49.5vw;
+    height: 35vw;
+  }
+
+  img.preview {
+    width: 49.5vw;
+    height: 35vw;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  div.postview {
+    width: 49.4vw;
+    height: 33.5vw;
+    display: flex;
+    column-gap: 1vw;
+    row-gap: 1vw;
+    flex-wrap: wrap;
+  }
+
+  img.postview {
+    width: 20vw;
+    height: 17vw;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  div.spotinfo {
+    width: 100%;
+  }
+
+  div.spotdescription {
+    width: 60vw;
+  }
+
+  div.spotbooking {
+    width: 30vw;
+    padding: 0.5vw;
+  }
+}
+
+div.spotform {
+  display: flex;
+  justify-content: center;
+}
+
+div form {
+  width: 50vw;
+  font-family: cursive;
+  display: flex;
+  flex-direction: column;
+  justify-items: stretch;
+}
+
+div.formrow {
+  display: flex;
+  flex-direction: row;
+}
+
+div.formrow div {
+  width: 25vw;
+}
+div.formrow input {
+  width: 25vw;
+}
+
+div.modal {
+  font-family: cursive;
+  text-align: center;
+  padding: 10px;
 }

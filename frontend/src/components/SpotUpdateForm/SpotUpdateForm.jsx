@@ -1,13 +1,33 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { createSpot } from '../../store/spot';
+import { updateSpot } from '../../store/spot';
+import { useParams } from 'react-router-dom';
 import OpenModalButton from '../OpenModalButton/OpenModalButton';
 import LoginFormModal from '../LoginFormModal/LoginFormModal';
+import { getSpotDetails } from '../../store/spot';
 
-function SpotCreateForm() {
+function SpotUpdateForm() {
   const sessionUser = useSelector((state) => state.session.user);
+  const spot = useSelector((state) => state.spot.getdetails);
+  const { spotId } = useParams();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    async function fetchSpotDetails() {
+      const data = await dispatch(getSpotDetails({spotId}));
+      setCountry(data.country);
+      setAddress(data.address);
+      setCity(data.city);
+      setState(data.state);
+      setLatitude(data.lat);
+      setLongitude(data.lng);
+      setDescription(data.description);
+      setName(data.name);
+      setPrice(data.price);
+    }
+    fetchSpotDetails();
+  }, [dispatch, spotId]);
 
   const [country, setCountry] = useState('');
   const [address, setAddress] = useState('');
@@ -20,11 +40,11 @@ function SpotCreateForm() {
   const [name, setName] = useState('');
   const [price, setPrice] = useState('');
 
-  const [previewImg, setPriviewImg] = useState('');
-  const [image1, setImage1] = useState('');
-  const [image2, setImage2] = useState('');
-  const [image3, setImage3] = useState('');
-  const [image4, setImage4] = useState('');
+  //const [previewImg, setPriviewImg] = useState('');
+  //const [image1, setImage1] = useState('');
+  //const [image2, setImage2] = useState('');
+  //const [image3, setImage3] = useState('');
+  //const [image4, setImage4] = useState('');
 
   const [errors, setErrors] = useState({});
 
@@ -41,11 +61,11 @@ function SpotCreateForm() {
   const handleName = e => setName(e.target.value);
   const handlePrice = e => setPrice(e.target.value);
 
-  const handlePriviewImg = e => setPriviewImg(e.target.value);
-  const handleImage1 = e => setImage1(e.target.value);
-  const handleImage2 = e => setImage2(e.target.value);
-  const handleImage3 = e => setImage3(e.target.value);
-  const handleImage4 = e => setImage4(e.target.value);
+  //const handlePriviewImg = e => setPriviewImg(e.target.value);
+  //const handleImage1 = e => setImage1(e.target.value);
+  //const handleImage2 = e => setImage2(e.target.value);
+  //const handleImage3 = e => setImage3(e.target.value);
+  //const handleImage4 = e => setImage4(e.target.value);
 
 
   const handleSubmit = async (e) => {
@@ -66,15 +86,15 @@ function SpotCreateForm() {
     if(description.length < 30) newErrors.description = "Description needs a minimum of 30 characters";
     if(name.length == 0) newErrors.name = "Name is required";
     if(price.length == 0) newErrors.price = "Price is required";
-    if(previewImg.length == 0) newErrors.previewImg = "Preview image is required";
+    //if(previewImg.length == 0) newErrors.previewImg = "Preview image is required";
     setErrors(newErrors);
 
     if(Object.values(newErrors).length === 0) {
       const newSpot = {
-        address, city, state, country, lat, lng, name, description, price,
-        previewImg, image1, image2, image3, image4
+        spotId, address, city, state, country, lat, lng, name, description, price,
+        //previewImg, image1, image2, image3, image4
       };
-      const { id } = await dispatch(createSpot(newSpot));
+      const { id } = await dispatch(updateSpot(newSpot));
       navigate(`/spots/${id}`);
     }
   }
@@ -90,17 +110,19 @@ function SpotCreateForm() {
     if(description.length >= 30) delete newErrors.description;
     if(name.length > 0) delete newErrors.name;
     if(price.length > 0) delete newErrors.price;
-    if(previewImg.length > 0) delete newErrors.previewImg;
+    //if(previewImg.length > 0) delete newErrors.previewImg;
     setErrors(newErrors);
-  }, [country, address, city, state, lng, lat, description, name, price, previewImg]);
+  }, [country, address, city, state, lng, lat, description, name, price/*, previewImg*/]);
 
   let spotForm;
-  if (sessionUser) {
+
+  if(sessionUser && spot && sessionUser.id == spot.ownerId) {
+
     spotForm = (
     <form
       onSubmit={handleSubmit}
     >
-      <h2>Create a New Spot</h2>
+      <h2>Update Your Spot</h2>
       <h3 className='removemargin'>Where&apos;s your place located?</h3>
       <p className='removemargin'>Guests will only get your exact address once they booked a reservation.</p>
       <div>Country <text className='errors'>{errors.country}</text></div>
@@ -191,67 +213,40 @@ function SpotCreateForm() {
       />
       </div>
       <div><text className='errors'>{errors.price}</text></div>
-      <h3 className='removemargin'>Liven up your spot with photos</h3>
-      <p className='removemargin'>Submit a link to at least one photo to publish your spot.</p>
-      <input
-          value={previewImg}
-          onChange={handlePriviewImg}
-          type="text"
-          name="previewImage"
-          placeholder="Preview Image URL"
-      />
-      <div><text className='errors'>{errors.previewImg}</text></div>
-      <input
-          value={image1}
-          onChange={handleImage1}
-          type="text"
-          name="image1"
-          placeholder="Image URL"
-      />
-      <div><text className='errors'>{errors.image1}</text></div>
-      <input
-          value={image2}
-          onChange={handleImage2}
-          type="text"
-          name="image2"
-          placeholder="Image URL"
-      />
-      <div><text className='errors'>{errors.image2}</text></div>
-      <input
-          value={image3}
-          onChange={handleImage3}
-          type="text"
-          name="image3"
-          placeholder="Image URL"
-      />
-      <div><text className='errors'>{errors.image3}</text></div>
-      <input
-          value={image4}
-          onChange={handleImage4}
-          type="text"
-          name="image4"
-          placeholder="Image URL"
-      />
-      <div><text className='errors'>{errors.image4}</text></div>
+
       <div className='center'>
         <button
           className='pagebutton'
           disabled={Object.values(errors).length}
           type="submit"
         >
-          Create Spot
+          Update Spot
         </button>
       </div>
     </form>
     );
   }
-  else {
+  else if(!spot) {
+    spotForm = (
+      <>
+        <h2>404: Spot couldn&apos;t be found</h2>
+      </>
+    )
+  }
+  else if(!sessionUser){
     spotForm = (
       <>
         <h2>You need to <OpenModalButton
           buttonText="Log In"
           modalComponent={<LoginFormModal />}
         /> first.</h2>
+      </>
+    )
+  }
+  else {
+    spotForm = (
+      <>
+        <h2>403: Forbidden</h2>
       </>
     )
   }
@@ -263,4 +258,4 @@ function SpotCreateForm() {
   );
 }
 
-export default SpotCreateForm;
+export default SpotUpdateForm;

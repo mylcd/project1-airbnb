@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import * as sessionActions from '../../store/session';
-import './SignupForm.css';
 
 function SignupFormModal() {
   const dispatch = useDispatch();
@@ -37,79 +36,70 @@ function SignupFormModal() {
         });
     }
     return setErrors({
-      confirmPassword: "Confirm Password field must be the same as the Password field"
+      confirmPassword: " Confirm Password Does Not Match Password"
     });
   };
 
   return (
-    <>
-      <h1>Sign Up</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Email
-          <input
-            type="text"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </label>
-        {errors.email && <p>{errors.email}</p>}
-        <label>
-          Username
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </label>
-        {errors.username && <p>{errors.username}</p>}
-        <label>
-          First Name
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-        </label>
-        {errors.firstName && <p>{errors.firstName}</p>}
-        <label>
-          Last Name
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            required
-          />
-        </label>
-        {errors.lastName && <p>{errors.lastName}</p>}
-        <label>
-          Password
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
-        {errors.password && <p>{errors.password}</p>}
-        <label>
-          Confirm Password
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-        </label>
-        {errors.confirmPassword && (
-          <p>{errors.confirmPassword}</p>
-        )}
-        <button type="submit">Sign Up</button>
+    <div className='modal'>
+      <h1 className='removemargin'>Sign Up</h1>
+      <form style={{marginLeft: "10px", marginRight: "10px"}} onSubmit={handleSubmit}>
+        <div className='left addwhitespace'>First Name <text className='errors'>{errors.firstName}</text></div>
+        <input
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          type="text"
+          name="firstName"
+          placeholder='Your first name'
+        />
+        <div className='left addwhitespace'>Last Name <text className='errors'>{errors.lastName}</text></div>
+        <input
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          type="text"
+          name="lastName"
+          placeholder='Your last name'
+        />
+        <div className='left addwhitespace'>Email <text className='errors'>{errors.email}</text></div>
+        <input
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          type="text"
+          name="email"
+          placeholder='example@test.com'
+        />
+        <div className='left addwhitespace'>Username <text className='errors'>{errors.username}</text></div>
+        <input
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          type="text"
+          name="username"
+          placeholder='Username must be at least 4 characters'
+        />
+        <div className='left addwhitespace'>Password <text className='errors'>{errors.password}</text></div>
+        <input
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          type="text"
+          name="password"
+          placeholder='Password must be at least 6 characters'
+        />
+        <div className='left addwhitespace'>Confirm Password <text className='errors'>{errors.confirmPassword}</text></div>
+        <input
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          type="text"
+          name="confirmPassword"
+          placeholder='Must be same as password'
+        />
+        <button className='pagebutton' style={{marginTop: "10px", marginBottom: "10px"}} type="submit"
+          disabled={!email || !username || !firstName || !lastName || !password || !confirmPassword
+            || username.length < 4 || password.length < 6 || confirmPassword.length < 6
+          }>
+            Sign Up
+        </button>
       </form>
-    </>
+    </div>
   );
 }
 
