@@ -80,7 +80,7 @@ function SignupFormModal() {
         <input
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          type="text"
+          type="password"
           name="password"
           placeholder='Password must be at least 6 characters'
         />
@@ -88,7 +88,7 @@ function SignupFormModal() {
         <input
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
-          type="text"
+          type="password"
           name="confirmPassword"
           placeholder='Must be same as password'
         />

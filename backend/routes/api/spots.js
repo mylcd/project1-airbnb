@@ -614,6 +614,7 @@ router.post('/:spotId/reviews', restoreUser, requireAuth, validateReview, async 
   if(oneSpot) {
     const prevReview = await Review.findOne({
       where: {
+        spotId: parseInt(spotId),
         userId: id
       }
     });
